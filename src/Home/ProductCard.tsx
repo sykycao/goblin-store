@@ -4,10 +4,14 @@ import { Product } from '../shared/types';
 
 export interface ProductProps {
   datum: Product;
+  useCartHook?: () => Pick<
+    ReturnType<typeof useCart>,
+    'products' | 'addToCart'
+  >;
 }
 
-export const ProductCard = ({ datum }: ProductProps) => {
-  const { addToCart, products } = useCart();
+export const ProductCard = ({ datum, useCartHook = useCart }: ProductProps) => {
+  const { addToCart, products } = useCartHook();
 
   const isInCart = !!products?.find((product) => datum.name === product.name);
 
@@ -23,7 +27,9 @@ export const ProductCard = ({ datum }: ProductProps) => {
       <p>{datum.name}</p>
       <p>{datum.price} Zm</p>
       {isInCart ? (
-        <button className="nes-btn is-disabled">Added to cart</button>
+        <button className="nes-btn is-disabled" disabled>
+          Added to cart
+        </button>
       ) : (
         <button
           className="nes-btn is-primary"

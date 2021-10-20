@@ -1,11 +1,54 @@
-import React from "react"
-import { render } from "@testing-library/react"
-import { ProductCard } from "./ProductCard"
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import { ProductCard } from './ProductCard';
+import { Product } from '../shared/types';
 
-describe("Product", () => {
-  it.todo("renders correctly")
+const product: Product = {
+  name: 'Product foo',
+  price: 55,
+  image: '/test.jpg',
+};
 
-  describe("on 'Add to cart' click", () => {
-    it.todo("calls 'addToCart' function")
-  })
-})
+describe('Product', () => {
+  it('renders correctly', () => {
+    const { container, getByRole } = render(<ProductCard datum={product} />);
+
+    expect(container.innerHTML).toMatch('Product foo');
+    expect(container.innerHTML).toMatch('55 Zm');
+    expect(getByRole('img')).toHaveAttribute('src', '/test.jpg');
+  });
+
+  describe('when product is in the cart', () => {
+    it("the 'Add to card' button is disable", () => {
+      const mockUseCartHook = () => ({
+        addToCart: () => {},
+        products: [product],
+      });
+
+      const { getByRole } = render(
+        <ProductCard datum={product} useCartHook={mockUseCartHook} />
+      );
+
+      expect(getByRole('button')).toBeDisabled();
+    });
+  });
+
+  describe('when product is not in the cart', () => {
+    describe("on 'Add to cart' click", () => {
+      it("calls 'addToCart' function", () => {
+        const addToCart = jest.fn();
+        const mockUseCartHook = () => ({
+          addToCart,
+          products: [],
+        });
+
+        const { getByText } = render(
+          <ProductCard datum={product} useCartHook={mockUseCartHook} />
+        );
+
+        fireEvent.click(getByText('Add to cart'));
+        expect(addToCart).toHaveBeenCalledWith(product);
+      });
+    });
+  });
+});
