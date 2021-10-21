@@ -1,16 +1,16 @@
-import React from "react"
-import { Product } from "../shared/types"
+import React from 'react';
+import { Product } from '../shared/types';
 
-interface CartItemProps {
-  product: Product
-  removeFromCart: (product: Product) => void
+export interface CartItemProps {
+  product: Product;
+  removeFromCart: (product: Product) => void;
 }
 
 export const CartItem = ({ product, removeFromCart }: CartItemProps) => {
   return (
     <div className="cart-item">
       <img
-        style={{ imageRendering: "pixelated" }}
+        style={{ imageRendering: 'pixelated' }}
         src={product.image}
         width="64px"
         height="64px"
@@ -20,12 +20,12 @@ export const CartItem = ({ product, removeFromCart }: CartItemProps) => {
       <p>{product.price} Zm</p>
       <button
         onClick={() => {
-          removeFromCart(product)
+          removeFromCart(product);
         }}
         className="nes-btn is-error"
       >
         Remove
       </button>
     </div>
-  )
-}
+  );
+};
