@@ -3,13 +3,13 @@ import { render, fireEvent } from '@testing-library/react';
 import { ProductCard } from './ProductCard';
 import { Product } from '../shared/types';
 
-const product: Product = {
-  name: 'Product foo',
-  price: 55,
-  image: '/test.jpg',
-};
+describe('ProductCard', () => {
+  const product: Product = {
+    name: 'Product foo',
+    price: 55,
+    image: '/test.jpg',
+  };
 
-describe('Product', () => {
   it('renders correctly', () => {
     const { container, getByRole } = render(<ProductCard datum={product} />);
 
@@ -19,16 +19,15 @@ describe('Product', () => {
   });
 
   describe('when product is in the cart', () => {
-    it("the 'Add to card' button is disable", () => {
+    it("the 'Add to cart' button is disabled", () => {
       const mockUseCartHook = () => ({
         addToCart: () => {},
         products: [product],
       });
 
       const { getByRole } = render(
-        <ProductCard datum={product} useCartHook={mockUseCartHook} />
+        <ProductCard datum={product} useCartHook={mockUseCartHook as any} />
       );
-
       expect(getByRole('button')).toBeDisabled();
     });
   });

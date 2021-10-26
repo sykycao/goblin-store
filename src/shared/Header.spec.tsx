@@ -1,6 +1,6 @@
-import { fireEvent } from '@testing-library/dom';
 import React from 'react';
 import { Header } from './Header';
+import { fireEvent } from '@testing-library/react';
 
 jest.mock('./CartWidget', () => ({
   CartWidget: () => <div>Cart widget</div>,

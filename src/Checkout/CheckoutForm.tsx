@@ -1,12 +1,10 @@
-import React from "react"
-import { submitCheckout, CheckoutPayload } from "../utils/api"
-import { useCart } from "../CartContext/CartContext"
-import { FormField } from "./FormField"
-import { useForm } from "react-hook-form"
-import * as yup from "yup"
+import React from 'react';
+import { FormField } from './FormField';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
 interface CheckoutFormProps {
-  submit?: (data: CheckoutPayload) => Promise<{ orderId: string | undefined, success?: boolean }>
+  submit?: () => Promise<void>;
 }
 
 const validationSchema = yup.object().shape({
@@ -16,40 +14,31 @@ const validationSchema = yup.object().shape({
     .required()
     .matches(
       /^\d{4}\s\d{4}\s\d{4}\s\d{4}$/,
-      "Card should have xxxx xxxx xxxx xxxx format"
+      'Card should have xxxx xxxx xxxx xxxx format'
     ),
-  expDate: yup.date().required(),
+  expDate: yup.date().nullable().default(null).required(),
   cvv: yup
     .string()
     .required()
-    .matches(/^\d\d\d$/, "CVV should contain three numbers"),
-})
+    .matches(/^\d\d\d$/, 'CVV should contain three numbers'),
+});
 
 export const CheckoutForm = ({
-  submit = submitCheckout,
+  submit = async () => {},
 }: CheckoutFormProps) => {
-  const { clearCart, products } = useCart()
   const { register, errors, handleSubmit } = useForm({
-    mode: "onBlur",
+    mode: 'onBlur',
     validationSchema,
-  })
-
-  const onSubmit = handleSubmit(async (data) => {
-    const { orderId } = await submit({
-      products 
-    })
-    clearCart()
-    window.location.assign(`/order/?orderId=${orderId}`)
-  })
+  });
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit(submit)}>
       <FormField
         placeholder="John Smith"
         type="text"
         name="name"
-        label="Cardholder's Name"
-        ref={register}
+        label="Cardholders Name"
+        inputRef={register}
         errors={errors.name}
       />
       <FormField
@@ -62,20 +51,20 @@ export const CheckoutForm = ({
         normalize={(value) => {
           return (
             value
-              .replace(/\s/g, "")
+              .replace(/\s/g, '')
               .match(/.{1,4}/g)
-              ?.join(" ")
-              .substr(0, 19) || ""
-          )
+              ?.join(' ')
+              .substr(0, 19) || ''
+          );
         }}
-        ref={register}
+        inputRef={register}
         errors={errors.cardNumber}
       />
       <FormField
         type="month"
         name="expDate"
         label="Expiration Date"
-        ref={register}
+        inputRef={register}
         errors={errors.expDate}
       />
       <FormField
@@ -83,13 +72,13 @@ export const CheckoutForm = ({
         type="number"
         name="cvv"
         label="CVV"
-        ref={register}
+        inputRef={register}
         errors={errors.cvv}
         normalize={(value) => {
-          return value.substr(0, 3)
+          return value.substr(0, 3);
         }}
       />
       <button className="nes-btn is-primary">Place order</button>
     </form>
-  )
-}
+  );
+};

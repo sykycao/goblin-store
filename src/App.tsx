@@ -12,6 +12,9 @@ export const App = () => {
       <Header />
       <div className="container">
         <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
           <Route path="/checkout">
             <Checkout />
           </Route>
@@ -21,10 +24,7 @@ export const App = () => {
           <Route path="/order">
             <OrderSummary />
           </Route>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route>Page not found!</Route>
+          <Route>Page not found</Route>
         </Switch>
       </div>
     </>

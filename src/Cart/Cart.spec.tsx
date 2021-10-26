@@ -1,6 +1,6 @@
-import { fireEvent } from '@testing-library/dom';
 import React from 'react';
 import { Cart } from './Cart';
+import { fireEvent } from '@testing-library/react';
 import { CartItemProps } from './CartItem';
 
 jest.mock('./CartItem', () => ({

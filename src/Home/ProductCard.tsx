@@ -1,16 +1,19 @@
 import React from 'react';
-import { useCart } from '../CartContext';
+import { useCartContext } from '../CartContext';
 import { Product } from '../shared/types';
 
-export interface ProductProps {
+export interface ProductCardProps {
   datum: Product;
   useCartHook?: () => Pick<
-    ReturnType<typeof useCart>,
+    ReturnType<typeof useCartContext>,
     'products' | 'addToCart'
   >;
 }
 
-export const ProductCard = ({ datum, useCartHook = useCart }: ProductProps) => {
+export const ProductCard = ({
+  datum,
+  useCartHook = useCartContext,
+}: ProductCardProps) => {
   const { addToCart, products } = useCartHook();
 
   const isInCart = !!products?.find((product) => datum.name === product.name);
@@ -27,7 +30,7 @@ export const ProductCard = ({ datum, useCartHook = useCart }: ProductProps) => {
       <p>{datum.name}</p>
       <p>{datum.price} Zm</p>
       {isInCart ? (
-        <button className="nes-btn is-disabled" disabled>
+        <button disabled className="nes-btn is-disabled">
           Added to cart
         </button>
       ) : (

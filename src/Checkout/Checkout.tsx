@@ -1,10 +1,23 @@
-import React from "react"
-import { CheckoutList } from "./CheckoutList"
-import { useCart } from "../CartContext/CartContext"
-import { CheckoutForm } from "./CheckoutForm"
+import React from 'react';
+import { CheckoutList } from './CheckoutList';
+import { useCartContext } from '../CartContext/CartContext';
+import { CheckoutForm } from './CheckoutForm';
+import { postCheckout } from '../utils/api';
 
-export const Checkout = () => {
-  const { products, totalPrice } = useCart()
+interface CheckoutProps {
+  useCartHook?: typeof useCartContext;
+}
+
+export const Checkout = ({ useCartHook = useCartContext }: CheckoutProps) => {
+  const { products, totalPrice, clearCart } = useCartHook();
+
+  const submitCheckout = async () => {
+    const { orderId } = await postCheckout({
+      products,
+    });
+    clearCart();
+    window.location.assign(`/order/?orderId=${orderId}`);
+  };
 
   return (
     <section className="nes-container with-title">
@@ -15,7 +28,7 @@ export const Checkout = () => {
         <p>Total: {totalPrice()} Zm</p>
       </div>
       <p>Enter your payment credentials:</p>
-      <CheckoutForm />
+      <CheckoutForm submit={submitCheckout} />
     </section>
-  )
-}
+  );
+};

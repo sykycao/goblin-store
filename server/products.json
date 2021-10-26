@@ -1,4 +1,5 @@
-  {"categories": [
+{
+  "categories": [
     {
       "name": "Weapons",
       "items": [
@@ -93,8 +94,9 @@
           "name": "Raspberry Pie",
           "description": "Simple sword description.",
           "image": "/images/raspberry_pie.png",
-          "price": 1 
+          "price": 1
         }
       ]
     }
-  ]}
+  ]
+}

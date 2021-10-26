@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../CartContext/CartContext';
+import { useCartContext } from '../CartContext/CartContext';
 import { CartItem } from './CartItem';
+import { Product } from '../shared/types';
 
-export interface CardProps {
-  useCartHook?: () => Pick<
-    ReturnType<typeof useCart>,
-    'products' | 'removeFromCart' | 'totalPrice'
-  >;
+interface CartProps {
+  useCartHook?: () => {
+    products: Product[];
+    removeFromCart: (product: Product) => void;
+    totalPrice: () => number;
+  };
 }
 
-export const Cart = ({ useCartHook = useCart }: CardProps) => {
+export const Cart = ({ useCartHook = useCartContext }: CartProps) => {
   const { products, removeFromCart, totalPrice } = useCartHook();
   if (!products.length) {
     return (

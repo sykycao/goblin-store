@@ -15,7 +15,7 @@ describe("CartWidget", () => {
     })
 
     const { container } = renderWithRouter(() => (
-      <CartWidget useCartHook={stubCartHook} />
+      <CartWidget useCartHook={stubCartHook as any} />
     ))
 
     expect(container.innerHTML).toMatch("1")

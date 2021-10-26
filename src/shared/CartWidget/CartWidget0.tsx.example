@@ -4,7 +4,7 @@ import cart from "./cart.svg"
 import { useCartContext } from "../../CartContext"
 
 interface CartWidgetProps {
-  useCartHook?: () => Pick<ReturnType<typeof useCartContext>, "products">;
+  useCartHook?: typeof useCartContext;
 }
 
 export const CartWidget = ({useCartHook = useCartContext}: CartWidgetProps) => {

@@ -1,23 +1,25 @@
-import React from "react"
-import { getProducts } from "../utils/api"
+import React from 'react';
+import { getProducts } from '../utils/api';
+import { Category } from '../shared/types';
 
-export const useProducts = () => {
-  const [categories, setCategories] = React.useState<any[]>([])
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [error, setError] = React.useState(false)
+export const useProducts = (apiGetProducts = getProducts) => {
+  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<any>(false);
 
   React.useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getProducts()
-        setCategories(data.categories || [])
+        const data = await apiGetProducts();
+        setCategories(data.categories || []);
       } catch (error) {
-        setError(error)
+        setError(error);
       }
-      setIsLoading(false)
-    }
-    fetchProducts()
-  }, [])
+      setIsLoading(false);
+    };
+    fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  return { categories, isLoading, error }
-}
+  return { categories, isLoading, error };
+};

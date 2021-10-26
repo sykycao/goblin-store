@@ -1,11 +1,11 @@
-import { render } from '@testing-library/react';
 import React from 'react';
-import { Home } from '.';
+import { Home } from './Home';
 import { Category } from '../shared/types';
-import { ProductProps } from './ProductCard';
+import { render } from '@testing-library/react';
+import { ProductCardProps } from './ProductCard';
 
 jest.mock('./ProductCard', () => ({
-  ProductCard: ({ datum }: ProductProps) => {
+  ProductCard: ({ datum }: ProductCardProps) => {
     const { name, price, image } = datum;
     return (
       <div>
@@ -41,6 +41,7 @@ describe('Home', () => {
         },
       ],
     };
+
     it('renders categories with products', () => {
       const mockUseProducts = () => ({
         categories: [category],

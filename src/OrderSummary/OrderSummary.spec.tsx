@@ -1,15 +1,72 @@
-import React from 'react'
+import React from 'react';
+import { OrderSummary } from './OrderSummary';
+import { Loader } from '../shared/Loader';
+import { render, fireEvent } from '@testing-library/react';
 
-describe("OrderSummary", () => {
-  describe("while order data being loaded", () => {
-    it.todo("renders loader")
-  }) 
+jest.mock('../shared/Loader', () => ({
+  Loader: jest.fn(() => null),
+}));
 
-  describe("when order is loaded", () => {
-    it.todo("renders order info")
-  }) 
+describe('OrderSummary', () => {
+  afterEach(jest.clearAllMocks);
 
-  describe("with error", () => {
-    it.todo("renders error info")
-  }) 
-})
+  describe('while order data being loaded', () => {
+    it('renders loader', () => {
+      const stubUseOrder = () => ({
+        isLoading: true,
+        order: undefined,
+      });
+
+      render(<OrderSummary useOrderHook={stubUseOrder} />);
+      expect(Loader).toHaveBeenCalled();
+    });
+  });
+
+  describe('when order is loaded', () => {
+    const stubUseOrder = () => ({
+      isLoading: false,
+      order: {
+        products: [
+          {
+            name: 'Product foo',
+            price: 10,
+            image: 'image.png',
+          },
+        ],
+      },
+    });
+
+    it('renders order info', () => {
+      const { container } = renderWithRouter(() => (
+        <OrderSummary useOrderHook={stubUseOrder} />
+      ));
+
+      expect(container.innerHTML).toMatch('Product foo');
+    });
+
+    it('navigates to main page on button click', () => {
+      const { getByText, history } = renderWithRouter(() => (
+        <OrderSummary useOrderHook={stubUseOrder} />
+      ));
+
+      fireEvent.click(getByText('Back to the store'));
+
+      expect(history.location.pathname).toEqual('/');
+    });
+  });
+
+  describe('without order', () => {
+    it('renders error message', () => {
+      const stubUseOrder = () => ({
+        isLoading: false,
+        order: undefined,
+      });
+
+      const { container } = render(
+        <OrderSummary useOrderHook={stubUseOrder} />
+      );
+
+      expect(container.innerHTML).toMatch("Couldn't load order info.");
+    });
+  });
+});
