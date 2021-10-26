@@ -8,22 +8,29 @@
 
 - I changed `"start:server": "ts-node --compiler-options {\"module\":\"commonjs\"} ./server/index.ts"` to `"start:server": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"} ./server/index.ts"` so that the script can be compatible with PowerShell on Windows 10.
 - Please install NodeJS version `10.20.1` to avoid running errors.
+- If you want to use a NodeJS version other than version 10 (10 ≤ NodeJS version ≤ 14), see instructions in section 2 below.
 
 ## Installation & Running
 
-Install the dependencies and devDependencies:
+1. Install the dependencies and devDependencies:
 
 ```sh
 yarn install
 ```
 
-Run the app:
+2. Install the dependencies and devDependencies (for NodeJS versions higher than 10):
+
+```sh
+yarn install --ignore-engines
+```
+
+3. Run the app:
 
 ```sh
 yarn dev
 ```
 
-Run the test:
+4. Run the test:
 
 ```sh
 yarn test
